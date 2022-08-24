@@ -4,8 +4,8 @@ function startGame(){
 }
 const gameArea = {
     canvas : document.createElement("canvas"),
-    sound : document.createElement("audio"),
     playSound : function(src){
+        this.sound = document.createElement("audio"),
         this.sound.src = "sound\\"+src;
         this.sound.play();
     },
@@ -37,6 +37,7 @@ var velG = 0;
 
 var speed = 1;
 
+var lock = false;
 document.addEventListener('keydown', (Event) => {
     let key = Event.code
     console.info(`${key}`)
@@ -54,7 +55,10 @@ document.addEventListener('keydown', (Event) => {
             keys.Down = 1;
             break;
         case "ShiftLeft":
-            gameArea.playSound("very nasty fard.mp3");
+            if(!lock){
+                gameArea.playSound("very nasty fard.mp3");
+                lock = true;
+            }
             speed = 10;
             break;
     }
@@ -76,6 +80,7 @@ document.addEventListener('keyup', (Event) => {
             keys.Down = 0;
             break;
         case "ShiftLeft":
+            lock = false;
             speed = 1;
             break;
     }
@@ -92,7 +97,6 @@ function updateGameArea(){
     velY -= keys.Up * speed;
 
     velX *= drag;
-    //TEMP
     velY *= drag;
 
     x += velX;
